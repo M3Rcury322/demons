@@ -91,7 +91,9 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
 }
 @media(max-width:460px){.character-grid{grid-template-columns:1fr}.character img{height:250px}.status{display:none}}
 
-.brand-mark{font-size:14px;letter-spacing:1px}
+.brand-mark{font-size:14px;letter-spacing:1px;position:relative;overflow:hidden;width:54px;height:54px;border-radius:14px;animation:none!important}
+.brand-mark span{position:relative;z-index:0}
+.brand-mark img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;z-index:1;display:block}
 .down{width:2px;height:16px;background:var(--red2);position:relative;margin:2px 0 6px;font-size:0}
 .down:after{content:"";position:absolute;left:-4px;bottom:-5px;border:5px solid transparent;border-top:6px solid var(--red2);border-bottom:0}
 .nav-icon{font-size:10px;font-weight:700;letter-spacing:.5px;opacity:.9}
@@ -132,18 +134,16 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
 #embers{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #bloodMoon{position:fixed;right:5vw;top:8vh;width:min(26vw,300px);aspect-ratio:1;z-index:0;pointer-events:none;animation:moonFloat 16s ease-in-out infinite}
 #bloodMoon:before{content:"";position:absolute;inset:-45%;background:radial-gradient(circle,#e13b5038 0,#b51f3618 38%,transparent 66%);animation:moonGlow 5s ease-in-out infinite}
-#bloodMoon i{position:absolute;inset:0;border-radius:50%;opacity:.55;
+#bloodMoon i{position:absolute;inset:0;border-radius:50%;opacity:.9;
  background:radial-gradient(circle at 36% 34%,#ff8d99 0,#d3293f 26%,#8c1a2e 60%,#3f0a15 100%);
  -webkit-mask-image:radial-gradient(circle at 71% 38%,transparent 0 46%,#000 47.5%);mask-image:radial-gradient(circle at 71% 38%,transparent 0 46%,#000 47.5%)}
 @keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(3deg)}}
 @keyframes moonGlow{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
 .fog{position:fixed;width:85vw;height:60vh;border-radius:50%;filter:blur(36px);z-index:0;pointer-events:none}
-#fog1{left:-25vw;bottom:-22vh;background:radial-gradient(closest-side,#8c1a2e33,transparent);animation:fogA 40s ease-in-out infinite alternate}
-#fog2{right:-30vw;bottom:-12vh;background:radial-gradient(closest-side,#5d102138,transparent);animation:fogB 52s ease-in-out infinite alternate}
+#fog1{left:-25vw;bottom:-22vh;background:radial-gradient(closest-side,#b51f3666,transparent);animation:fogA 40s ease-in-out infinite alternate}
+#fog2{right:-30vw;bottom:-12vh;background:radial-gradient(closest-side,#8c1a2e66,transparent);animation:fogB 52s ease-in-out infinite alternate}
 @keyframes fogA{to{transform:translate(38vw,-10vh) scale(1.25)}}
 @keyframes fogB{to{transform:translate(-40vw,-14vh) scale(1.3)}}
-#heart{position:fixed;inset:0;z-index:0;pointer-events:none;box-shadow:inset 0 0 190px #8c1a2e55;animation:heartbeat 3.4s ease-in-out infinite}
-@keyframes heartbeat{0%,40%,100%{opacity:.45}8%{opacity:1}16%{opacity:.55}24%{opacity:.95}}
 
 /* --- progress --- */
 #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#5d1021,var(--red2),#ff8a98);box-shadow:0 0 12px var(--red2);z-index:100;transition:width .1s linear}
@@ -156,11 +156,7 @@ html.blood-cursor input{cursor:text!important}
  border-radius:0 50% 50% 50%;background:radial-gradient(circle at 62% 62%,#ff7d8c 0,#d3293f 45%,#6d1224 100%);
  box-shadow:0 0 14px #e13b50aa,0 0 4px #ff8a98;transform-origin:0 0;transition:opacity .25s,filter .2s}
 #bloodCursor.down{filter:brightness(1.5) saturate(1.3)}
-#bloodRing{position:fixed;left:0;top:0;width:34px;height:34px;pointer-events:none;z-index:299;opacity:0;transition:opacity .25s}
-#bloodRing:before{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid #e13b5099;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s,border-color .3s}
-#bloodRing.hot:before{transform:scale(1.75);background:#e13b5020;border-color:#ff8a98}
-html.over-input #bloodCursor,html.over-input #bloodRing{opacity:0!important}
-
+html.over-input #bloodCursor,html.over-input 
 /* --- blocks: blood drip-in, drips, splash --- */
 .card{position:relative;transition:border-color .3s,box-shadow .3s}
 .card:hover{border-color:#8c2a3f;box-shadow:0 0 0 1px #e13b5033,0 12px 40px #a21c3538}
@@ -168,14 +164,6 @@ html.over-input #bloodCursor,html.over-input #bloodRing{opacity:0!important}
 .reveal.in{opacity:1;transform:none;filter:none;transition:opacity .7s ease,transform .85s cubic-bezier(.3,1.5,.4,1),filter .6s}
 .splash{animation:splash .9s ease-out}
 @keyframes splash{0%{box-shadow:0 0 0 0 #e13b5099}100%{box-shadow:0 0 0 24px #e13b5000}}
-.drips{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:3}
-.drips:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#b51f36,#e13b50,#b51f36,transparent);border-radius:2px}
-.drips i{position:absolute;top:0;width:4px;height:0;margin-left:-2px;border-radius:0 0 3px 3px;background:linear-gradient(#b51f36,#e13b50);transition:height 1.5s cubic-bezier(.25,.8,.3,1) var(--dl)}
-.drips i:after{content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;margin-left:-4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 32%,#ff8d99,#c2243c 65%,#7e1226);opacity:0;transition:opacity .4s calc(var(--dl) + .9s)}
-.bleed>.drips i{height:var(--len)}
-.bleed>.drips i:after{opacity:1}
-.bleed:hover>.drips i{height:calc(var(--len)*1.7);transition-delay:0s}
-.section-head h3:after{content:"";display:block;height:3px;width:0;margin-top:6px;border-radius:3px;background:linear-gradient(90deg,#b51f36,#e13b50);box-shadow:0 0 10px #e13b5088;animation:bleedline 1s .2s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes bleedline{to{width:54px}}
 
 /* --- characters --- */
@@ -185,8 +173,6 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
 .character:hover img{transform:scale(1.07);filter:saturate(1.2) contrast(1.05)}
 
 /* --- heartbeat badges / logo / titles --- */
-@keyframes beat{0%,40%,100%{transform:scale(1);box-shadow:0 0 0 0 #e13b5000}10%{transform:scale(1.07);box-shadow:0 0 16px 2px #e13b5088}20%{transform:scale(1);box-shadow:0 0 4px 0 #e13b5044}30%{transform:scale(1.05);box-shadow:0 0 14px 2px #e13b5077}}
-.character .rank,.hero-tag,.brand-mark{animation:beat 3.2s ease-in-out infinite}
 .hero h2,.page-title{background:linear-gradient(90deg,#fff 0%,#fff 38%,#ff6b7d 50%,#fff 62%,#fff 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 8s linear infinite}
 @keyframes shine{0%{background-position:120% 0}100%{background-position:-120% 0}}
 .hero:after{animation:spin 40s linear infinite}
@@ -201,7 +187,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
 /* --- buttons: blood fills up --- */
 .nav-btn{position:relative;overflow:hidden}
 .nav-btn:hover{transform:translateX(3px)}
-.nav-btn.active:before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:3px;border-radius:3px;background:var(--red2);box-shadow:0 0 10px var(--red2);animation:beat 3.2s infinite}
+.nav-btn.active:before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:3px;border-radius:3px;background:var(--red2);box-shadow:0 0 10px var(--red2)}
 .link-btn,.tab,.back-btn{position:relative;overflow:hidden;isolation:isolate}
 .link-btn:before,.tab:before,.back-btn:before{content:"";position:absolute;left:-5%;right:-5%;bottom:0;height:0;z-index:-1;background:linear-gradient(#e13b50,#8c1a2e);border-radius:50% 50% 0 0/14px 14px 0 0;transition:height .4s cubic-bezier(.2,.8,.2,1)}
 .link-btn:hover:before,.tab:hover:before,.back-btn:hover:before{height:115%}
@@ -212,14 +198,8 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
 .step-line,.rule{transition:transform .25s,border-color .25s}
 .step-line:hover,.rule:hover{transform:translateX(4px);border-color:#6a2c3b}
 
-/* --- page change: blood curtain --- */
-#curtain{position:fixed;left:0;top:0;width:100%;height:230vh;z-index:150;pointer-events:none;transform:translateY(calc(-100% - 100px));will-change:transform}
-#curtain .body{position:absolute;inset:0;background:linear-gradient(#5d1021,#8c1a2e 45%,#b51f36)}
-#curtain svg{position:absolute;left:0;top:calc(100% - 1px);width:100%;height:90px;display:block}
-#curtain path{fill:#b51f36}
-#curtain.go{animation:curtain .95s cubic-bezier(.5,0,.5,1) forwards}
-@keyframes curtain{0%{transform:translateY(calc(-100% - 100px))}100%{transform:translateY(100vh)}}
-
+/* --- page change: dissolve --- */
+.page.leaving{opacity:0;transform:translateY(14px);filter:blur(6px);transition:opacity .22s ease,transform .22s ease,filter .22s ease}
 /* --- lightbox --- */
 #lightbox{position:fixed;inset:0;background:#050304ee;backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;padding:24px}
 #lightbox.open{opacity:1;pointer-events:auto}
@@ -229,27 +209,36 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
 #lightbox span{color:var(--muted);font-size:11px}
 
 @media(max-width:760px){#bloodMoon{width:40vw;right:-6vw;top:10vh}}
-@media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation:none!important;transition:none!important}
-  .reveal{opacity:1;transform:none;filter:none}
-  .section-head h3:after{width:54px}
-  #embers,#bloodTrail,#bloodCursor,#bloodRing,#curtain,.fog{display:none}
-  html.blood-cursor,html.blood-cursor *{cursor:auto!important}
-}
+
+#ambient{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+@media(max-width:760px){}
+.fx-toggle{background:transparent;color:#c9aab1;border:1px solid #5a2937;border-radius:30px;padding:6px 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-right:10px;transition:.2s}
+.fx-toggle:hover{background:#70203355;color:#fff}
+.top-right{display:flex;align-items:center}
+/* calm pages: no block animations */
+.calm .card:hover{border-color:var(--line);box-shadow:none}
+.calm .character:hover img{transform:none;filter:none}
+.calm .rule:hover,.calm .step-line:hover{transform:none;border-color:var(--line)}
+.calm .section-head h3:after{animation:none;width:54px}
+/* effects switched off */
+html.fx-off #embers,html.fx-off #ambient,html.fx-off #bloodTrail,html.fx-off #bloodCursor,html.fx-off .fog,html.fx-off #bloodMoon{display:none}
+html.fx-off html.fx-off .reveal{opacity:1!important;transform:none!important;filter:none!important}
+html.fx-off *,html.fx-off *:before,html.fx-off *:after{animation:none!important}
+html.fx-off.blood-cursor,html.fx-off.blood-cursor *{cursor:auto!important}
+html.fx-off .section-head h3:after{width:54px}
 </style>
 </head>
 <body>
 <div id="bloodMoon"><i></i></div>
 <div class="fog" id="fog1"></div><div class="fog" id="fog2"></div>
-<div id="heart"></div>
 <canvas id="embers"></canvas>
 <div id="progress"></div>
-<div id="curtain"><div class="body"></div><svg viewBox="0 0 1000 90" preserveAspectRatio="none"><path d=""/></svg></div>
-<canvas id="bloodTrail"></canvas><div id="bloodCursor"></div><div id="bloodRing"></div>
+<canvas id="ambient"></canvas>
+<canvas id="bloodTrail"></canvas><div id="bloodCursor"></div>
 <div id="lightbox"><img alt=""><p></p><span>Нажмите, чтобы закрыть</span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-mark">DS2</div><h1>Архив демонов</h1><p>yufu.su DS2</p></div>
+  <div class="brand"><div class="brand-mark"><span>DS2</span><img src="images/muzan.jpg" alt="Мудзан" onerror="this.remove()"></div><h1>Архив демонов</h1><p>yufu.su DS2</p></div>
   <div class="nav-label">Основное</div>
   <button class="nav-btn active" data-page="home"><span class="nav-icon">01</span>Главная информация</button>
   <button class="nav-btn" data-page="moons"><span class="nav-icon">02</span>Двенадцать Лун</button>
@@ -269,7 +258,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
 <main class="main">
 <header class="topbar">
   <div style="display:flex;align-items:center;gap:12px"><button class="menu-toggle" id="menuToggle">Меню</button><div class="breadcrumb">ФРАКЦИЯ / <span id="crumb">ГЛАВНАЯ ИНФОРМАЦИЯ</span></div></div>
-  <div class="status">yufu.su DS2</div>
+  <div class="top-right"><button class="fx-toggle" id="fxToggle" type="button">Эффекты: вкл</button><div class="status">yufu.su DS2</div></div>
 </header>
 <div class="content">
 
@@ -315,7 +304,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Главная информация</span></div>
 </section>
 
-<section class="page" id="moons">
+<section class="page calm" id="moons">
   <div class="eyebrow">02 / Особый состав</div><h2 class="page-title">Двенадцать Лун</h2>
   <p class="lead">Демоны Двенадцати Лун — группа сильнейших демонов под командованием Мудзана Кибуцуджи. Они получили от Прародителя часть демонической крови, усиливающей их способности. У низших Лун число находится в одном глазу, у высших на втором глазу присутствует надпись «Высшая». Нумерация идёт от сильнейшей первой Луны до шестой.</p>
   <div class="section-head"><h3>Высшие Луны</h3><p>Сильнейшие представители</p></div>
@@ -395,7 +384,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Привилегии должностей</span></div>
 </section>
 
-<section class="page" id="oath">
+<section class="page calm" id="oath">
   <div class="eyebrow">05 / Регламент</div><h2 class="page-title">Клятва крови</h2>
   <p class="lead">Обязательные правила поведения, подчинения и взаимодействия между членами демонической фракции.</p>
   <div class="rule-list">
@@ -449,7 +438,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Клятва крови</span></div>
 </section>
 
-<section class="page" id="promotion">
+<section class="page calm" id="promotion">
   <div class="eyebrow">07 / Развитие персонажа</div><h2 class="page-title">Система повышения</h2>
   <p class="lead">Повышение демона проходит последовательно, по цепочке рангов. Для перехода на следующий ранг необходимо выполнить все установленные требования.</p>
   <div class="note"><strong>Основное правило КД:</strong> таймер повышения считается персонально — с момента последнего повышения конкретного демона. Для защиты от злоупотреблений новое повышение доступно только после полного личного КД и дополнительных 10 минут проверочного буфера.<br><br><strong>Пример:</strong> если демон повысился в 22:00 09.03, следующее повышение возможно не раньше 22:10 10.03.<br><br>КД сохраняется по рангам.</div>
@@ -597,7 +586,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Песок</span></div>
 </section>
 
-<section class="page" id="reprimands">
+<section class="page calm" id="reprimands">
   <div class="eyebrow">06 / Дисциплина</div><h2 class="page-title">Устои крови</h2>
   <p class="lead">Выговор — это дисциплинарное взыскание, которое выдаётся демонам за нарушение правил. Существует два типа выговоров: отрядный и фракционный.</p>
   <div class="grid">
@@ -625,7 +614,7 @@ html:not(.blood-cursor) .character img{cursor:zoom-in}
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Устои крови</span></div>
 </section>
 
-<section class="page" id="circles">
+<section class="page calm" id="circles">
   <div class="eyebrow">08 / Высшее развитие</div><h2 class="page-title">Круги крови</h2>
   <p class="lead">Круги крови — отдельная система развития демонов. После каждого повышения внутри кругов ранг падает с Шико до Хобура. Повышение внутри кругов возможно только по специальной системе, общая система повышения не учитывается.</p>
   <div class="section-head"><h3>Привилегии кругов</h3><p>КД повышения кругов: 7 дней. КД повышения ранга: 2 дня.</p></div>
@@ -707,7 +696,8 @@ function doOpen(id,skipHash){
   crumb.textContent=label||'ГЛАВНАЯ ИНФОРМАЦИЯ';
   document.getElementById('sidebar').classList.remove('open');
   if(!skipHash){try{history.replaceState(null,'','#'+id)}catch(e){location.hash=id}}
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'auto'});
+  if(window.AM){AM.items.length=0;AM.pageSince=performance.now()}
 }
 navButtons.forEach(b=>b.addEventListener('click',()=>openPage(b.dataset.page)));
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)openPage(t.dataset.go)});
@@ -725,69 +715,66 @@ window.addEventListener('hashchange',()=>openPage(location.hash.slice(1),true));
 if(location.hash)doOpen(location.hash.slice(1),true);
 
 
-/* ===== blood curtain page transition ===== */
-const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const curtain=document.getElementById('curtain');
-let curtainBusy=false;
-function dripPath(){
-  const w=1000;let x=w,d='M0 0H'+w+'V12';
-  while(x>30){
-    x-=30+Math.random()*90;
-    const dw=8+Math.random()*16,dl=14+Math.random()*58;
-    d+=' H'+x.toFixed(1)+' C'+(x-1).toFixed(1)+' 12 '+(x-1).toFixed(1)+' '+(12+dl).toFixed(1)+' '+(x-dw/2).toFixed(1)+' '+(12+dl).toFixed(1)
-      +' C'+(x-dw+1).toFixed(1)+' '+(12+dl).toFixed(1)+' '+(x-dw+1).toFixed(1)+' 12 '+(x-dw).toFixed(1)+' 12';
-    x-=dw;
-  }
-  return d+' H0Z';
+/* ===== page transition + effects switch ===== */
+const reduceMotion=false;
+const FX={on:true};
+try{FX.on=localStorage.getItem('fx')!=='off'}catch(e){}
+function applyFx(){
+  document.documentElement.classList.toggle('fx-off',!FX.on);
+  const b=document.getElementById('fxToggle');if(b)b.textContent='Эффекты: '+(FX.on?'вкл':'выкл');
 }
+applyFx();
+document.getElementById('fxToggle').addEventListener('click',()=>{
+  FX.on=!FX.on;applyFx();
+  try{localStorage.setItem('fx',FX.on?'on':'off')}catch(e){}
+});
+let pageBusy=false;
 function openPage(id,skipHash){
   const cur=pages.find(p=>p.classList.contains('active'));
-  if(!curtain||reduceMotion||curtainBusy||(cur&&cur.id===id)){doOpen(id,skipHash);return}
-  curtainBusy=true;
-  curtain.querySelector('path').setAttribute('d',dripPath());
-  curtain.classList.remove('go');void curtain.offsetWidth;curtain.classList.add('go');
-  setTimeout(()=>doOpen(id,skipHash),430);
-  setTimeout(()=>{curtainBusy=false;curtain.classList.remove('go')},1000);
+  if(!FX.on||pageBusy||!cur||cur.id===id){doOpen(id,skipHash);return}
+  pageBusy=true;
+  cur.classList.add('leaving');
+  setTimeout(()=>{cur.classList.remove('leaving');doOpen(id,skipHash);pageBusy=false},220);
 }
 
 /* ===== effects ===== */
 (function(){
   const reduce=reduceMotion;
-  const fine=window.matchMedia('(pointer: fine)').matches;
+  const fine=window.matchMedia('(any-pointer: fine)').matches;
   const R=(a,b)=>a+Math.random()*(b-a);
 
-  /* background: red spider lilies + thin blood rain */
+  /* background: red spider lilies + blood rain */
   const cv=document.getElementById('embers');
-  if(cv&&!reduce){
+  if(cv){
     const ctx=cv.getContext('2d');let W,H;
     const size=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};size();addEventListener('resize',size);
-    const mkFlower=init=>({x:R(0,W),y:init?R(0,H):-40,len:R(10,22),rot:R(0,6.28),vr:R(-.006,.006),vy:R(.2,.55),sw:R(0,6.28),a:R(.18,.42),n:5+Math.floor(R(0,3))});
-    const mkDrop=init=>({x:R(0,W),y:init?R(0,H):R(-120,0),l:R(10,28),v:R(8,14),a:R(.05,.15)});
-    const flowers=Array.from({length:Math.min(16,Math.floor(innerWidth/70))},()=>mkFlower(true));
-    const drops=Array.from({length:Math.min(55,Math.floor(innerWidth/28))},()=>mkDrop(true));
+    const mkFlower=init=>({x:R(0,W),y:init?R(0,H):-50,len:R(12,26),rot:R(0,6.28),vr:R(-.007,.007),vy:R(.25,.6),sw:R(0,6.28),a:R(.3,.6),n:5+Math.floor(R(0,3))});
+    const mkDrop=init=>({x:R(0,W),y:init?R(0,H):R(-140,0),l:R(12,34),v:R(9,16),a:R(.12,.3)});
+    const flowers=Array.from({length:Math.max(10,Math.min(22,Math.floor(innerWidth/60)))},()=>mkFlower(true));
+    const drops=Array.from({length:Math.max(25,Math.min(70,Math.floor(innerWidth/24)))},()=>mkDrop(true));
     function flower(f){
       ctx.save();ctx.translate(f.x,f.y);ctx.rotate(f.rot);
-      ctx.strokeStyle='rgba(225,59,80,'+f.a+')';ctx.fillStyle='rgba(255,120,135,'+f.a+')';ctx.lineWidth=1.3;ctx.lineCap='round';
+      ctx.strokeStyle='rgba(235,60,85,'+f.a+')';ctx.fillStyle='rgba(255,130,145,'+f.a+')';ctx.lineWidth=1.5;ctx.lineCap='round';
       for(let k=0;k<f.n;k++){
         const a=k*6.283/f.n,c=Math.cos(a),s=Math.sin(a);
         ctx.beginPath();ctx.moveTo(0,0);
         ctx.quadraticCurveTo(c*f.len*.6+s*f.len*.35,s*f.len*.6-c*f.len*.35,c*f.len,s*f.len);ctx.stroke();
-        ctx.beginPath();ctx.arc(c*f.len,s*f.len,1.3,0,6.283);ctx.fill();
+        ctx.beginPath();ctx.arc(c*f.len,s*f.len,1.5,0,6.283);ctx.fill();
       }
       ctx.restore();
     }
     (function loop(){
-      if(!document.hidden){
-        ctx.clearRect(0,0,W,H);
-        ctx.lineWidth=1;ctx.lineCap='round';
+      ctx.clearRect(0,0,W,H);
+      if(FX.on&&!document.hidden){
+        ctx.lineWidth=1.2;ctx.lineCap='round';
         for(const d of drops){
-          ctx.strokeStyle='rgba(205,30,55,'+d.a+')';
-          ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-1.2,d.y+d.l);ctx.stroke();
-          d.y+=d.v;if(d.y>H+30)Object.assign(d,mkDrop(false));
+          ctx.strokeStyle='rgba(215,35,60,'+d.a+')';
+          ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-1.4,d.y+d.l);ctx.stroke();
+          d.y+=d.v;if(d.y>H+40)Object.assign(d,mkDrop(false));
         }
         for(const f of flowers){
-          f.y+=f.vy;f.sw+=.012;f.x+=Math.sin(f.sw)*.4;f.rot+=f.vr;
-          if(f.y>H+40)Object.assign(f,mkFlower(false));
+          f.y+=f.vy;f.sw+=.012;f.x+=Math.sin(f.sw)*.45;f.rot+=f.vr;
+          if(f.y>H+50)Object.assign(f,mkFlower(false));
           flower(f);
         }
       }
@@ -795,16 +782,153 @@ function openPage(id,skipHash){
     })();
   }
 
+  /* ambient blood effects: appear only in empty space, never over text */
+  const am=document.getElementById('ambient');
+  window.AM={items:[],occ:[],lastOcc:0,next:0,pageSince:performance.now()};
+  if(am){
+    const actx=am.getContext('2d');let AW,AH;
+    const ars=()=>{AW=am.width=innerWidth;AH=am.height=innerHeight;AM.items.length=0};ars();addEventListener('resize',ars);
+    const sidebar=document.getElementById('sidebar'),topbar=document.querySelector('.topbar');
+    const ease=x=>1-Math.pow(1-x,3),clamp=x=>Math.max(0,Math.min(1,x));
+    function region(){
+      const sr=sidebar.getBoundingClientRect();
+      return {l:Math.max(0,sr.right),t:topbar.getBoundingClientRect().bottom,r:AW,b:AH};
+    }
+    function occupied(){
+      const out=[],reg=region();
+      const add=(r,pad)=>{if(r.width>0&&r.height>0&&r.bottom>-50&&r.top<AH+50)out.push({l:r.left-pad,t:r.top-pad,r:r.right+pad,b:r.bottom+pad})};
+      const page=document.querySelector('.page.active');
+      if(page){
+        page.querySelectorAll('.card,.rule,.allowed,.forbidden,.note,.hierarchy,.hero,.step-line,.search,.tabs,.link-btn,.back-btn,.pill-row,.character,.section-head').forEach(e=>add(e.getBoundingClientRect(),20));
+        page.querySelectorAll('h2,.eyebrow,.lead,.section-head h3,.section-head p,.footer span').forEach(e=>{
+          const rg=document.createRange();rg.selectNodeContents(e);
+          for(const r of rg.getClientRects())add(r,22);
+        });
+      }
+      document.querySelectorAll('.content>.footer').forEach(e=>add(e.getBoundingClientRect(),20));
+      return out;
+    }
+    const hits=(b,list)=>list.some(o=>b.l<o.r&&b.r>o.l&&b.t<o.b&&b.b>o.t);
+    const boxOf=(it,sy)=>({l:it.x+it.b[0],t:it.y-sy+it.b[1],r:it.x+it.b[2],b:it.y-sy+it.b[3]});
+    function make(kind,x,y){
+      const it={kind,x,y:y+scrollY,born:performance.now(),rot:R(0,6.283)};
+      if(kind==='lily'){it.size=R(26,40);it.dur=7000;it.b=[-it.size-12,-it.size-12,it.size+12,it.size+12]}
+      else if(kind==='splat'){it.r=R(7,12);it.dur=7500;it.sat=Array.from({length:7+Math.floor(R(0,6))},()=>({a:R(0,6.283),d:R(16,46),r:R(1.2,4.2),dl:R(0,.35)}));it.b=[-62,-62,62,62]}
+      else if(kind==='drip'){it.len=R(70,130);it.dur=6500;it.b=[-16,-14,16,it.len+22]}
+      else if(kind==='ripple'){it.size=R(38,54);it.dur=6500;it.b=[-it.size-8,-it.size-8,it.size+8,it.size+8]}
+      else{it.rot=R(-.4,.4);it.dur=5500;it.b=[-40,-30,100,125]}
+      return it;
+    }
+    const KINDS=['lily','lily','splat','drip','ripple','claw'];
+    function trySpawn(now){
+      const reg=region();if(reg.r-reg.l<160||reg.b-reg.t<160)return;
+      for(let n=0;n<20;n++){
+        const kind=KINDS[Math.floor(Math.random()*KINDS.length)];
+        const x=R(reg.l+60,reg.r-60),y=R(reg.t+40,reg.b-130);
+        const it=make(kind,x,y-scrollY+scrollY);
+        it.y=y+scrollY;
+        const bx=boxOf(it,scrollY);
+        if(bx.l<reg.l+10||bx.r>reg.r-10||bx.t<reg.t+6||bx.b>reg.b-6)continue;
+        if(hits(bx,AM.occ))continue;
+        if(AM.items.some(o=>hits(bx,[boxOf(o,scrollY)])))continue;
+        AM.items.push(it);return;
+      }
+    }
+    const DRAW={
+      lily(c,it,x,y,t){
+        const g=ease(clamp(t/.4)),rot=it.rot+t*.5,n=7;
+        c.shadowColor='#e13b50';c.shadowBlur=10;c.lineCap='round';c.lineWidth=1.8;
+        c.strokeStyle='rgba(235,60,85,.95)';c.fillStyle='rgba(255,140,155,.95)';
+        for(let k=0;k<n;k++){
+          const a=rot+k*6.283/n,co=Math.cos(a),si=Math.sin(a),L=it.size*g;
+          c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+co*L*.6+si*L*.4,y+si*L*.6-co*L*.4,x+co*L,y+si*L);c.stroke();
+          c.beginPath();c.arc(x+co*L,y+si*L,1.8*g,0,6.283);c.fill();
+        }
+        c.beginPath();c.arc(x,y,3*g,0,6.283);c.fill();
+      },
+      splat(c,it,x,y,t){
+        const g=ease(clamp(t/.15));
+        c.fillStyle='rgba(190,30,55,.95)';
+        c.beginPath();c.arc(x,y,it.r*g,0,6.283);c.fill();
+        for(const s of it.sat){
+          const k=ease(clamp((t-s.dl*.3)/.18));if(k<=0)continue;
+          c.beginPath();c.arc(x+Math.cos(s.a)*s.d*k,y+Math.sin(s.a)*s.d*k,s.r*k,0,6.283);c.fill();
+        }
+        c.fillStyle='rgba(255,140,155,.55)';c.beginPath();c.arc(x-it.r*.3,y-it.r*.3,it.r*.28*g,0,6.283);c.fill();
+      },
+      drip(c,it,x,y,t){
+        const p=ease(clamp(t/.65)),L=it.len*p;
+        c.strokeStyle='rgba(190,30,55,.95)';c.fillStyle='rgba(205,35,60,.98)';c.lineCap='round';c.lineWidth=3.2;
+        c.beginPath();c.arc(x,y,5.5,0,6.283);c.fill();
+        c.beginPath();c.moveTo(x,y);c.lineTo(x,y+L);c.stroke();
+        c.beginPath();c.arc(x,y+L,4.6,0,6.283);c.fill();
+        c.fillStyle='rgba(255,150,160,.6)';c.beginPath();c.arc(x-1.4,y+L-1.4,1.3,0,6.283);c.fill();
+      },
+      ripple(c,it,x,y,t){
+        c.lineWidth=1.7;
+        for(let i=0;i<3;i++){
+          const ph=t*3-i*.35;if(ph<0)continue;const q=ph%1;
+          c.strokeStyle='rgba(225,59,80,'+(1-q)*.9+')';
+          c.beginPath();c.ellipse(x,y,q*it.size,q*it.size*.45,0,0,6.283);c.stroke();
+        }
+        c.fillStyle='rgba(200,32,56,.9)';c.beginPath();c.arc(x,y,3,0,6.283);c.fill();
+      },
+      claw(c,it,x,y,t){
+        c.save();c.translate(x,y);c.rotate(it.rot);
+        c.lineCap='round';c.strokeStyle='rgba(215,40,65,.95)';c.shadowColor='#e13b50';c.shadowBlur=8;
+        for(let j=0;j<3;j++){
+          const pr=ease(clamp((t-j*.05)/.2));if(pr<=0)continue;
+          c.lineWidth=3.4-j*.5;c.beginPath();
+          const ox=j*16;
+          for(let u=0;u<=pr+.001;u+=.04){
+            const uu=Math.min(u,pr),px=ox+2*(1-uu)*uu*26+uu*uu*18,py=uu*uu*80+2*(1-uu)*uu*30;
+            if(u===0)c.moveTo(ox,0);else c.lineTo(px,py);
+          }
+          c.stroke();
+        }
+        c.restore();
+      }
+    };
+    (function tick(){
+      const now=performance.now(),sy=scrollY;
+      actx.clearRect(0,0,AW,AH);
+      if(FX.on&&!document.hidden){
+        if(now-AM.lastOcc>600){
+          AM.occ=occupied();AM.lastOcc=now;
+          for(const it of AM.items){
+            if(hits(boxOf(it,sy),AM.occ)&&(now-it.born)/it.dur<.75)it.born=now-it.dur*.75;
+          }
+        }
+        if(now>AM.next&&AM.items.length<7&&now-AM.pageSince>1400){AM.next=now+R(800,1600);trySpawn(now)}
+        const reg=region();
+        actx.save();actx.beginPath();actx.rect(reg.l,reg.t,reg.r-reg.l,reg.b-reg.t);actx.clip();
+        for(let i=AM.items.length-1;i>=0;i--){
+          const it=AM.items[i],t=(now-it.born)/it.dur;
+          if(t>=1){AM.items.splice(i,1);continue}
+          const y=it.y-sy;if(y<-250||y>AH+250)continue;
+          const a=Math.min(1,t/.1)*(t>.75?(1-t)/.25:1);
+          actx.save();actx.globalAlpha=a;DRAW[it.kind](actx,it,it.x,y,t);actx.restore();
+        }
+        actx.restore();
+      }
+      requestAnimationFrame(tick);
+    })();
+    document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('.tab'))setTimeout(()=>{AM.items.length=0;AM.pageSince=performance.now()},30)});
+    const rsb=document.getElementById('rankSearch');
+    if(rsb)rsb.addEventListener('input',()=>{AM.items.length=0;AM.pageSince=performance.now()});
+  }
+
   /* scroll progress */
   const bar=document.getElementById('progress');
   const upd=()=>{const h=document.documentElement;const m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'};
   addEventListener('scroll',upd,{passive:true});upd();
 
-  /* blood cursor: drop at the pointer, lagging ring, falling droplets, splat on click */
-  const bc=document.getElementById('bloodCursor'),ring=document.getElementById('bloodRing'),tc=document.getElementById('bloodTrail');
-  if(fine&&!reduce&&bc&&ring&&tc){
+  /* blood cursor: works with any mouse, independent of OS animation settings */
+  const bc=document.getElementById('bloodCursor'),tc=document.getElementById('bloodTrail');
+  if(bc&&tc){
     const ctx=tc.getContext('2d');let W,H;
     const rs=()=>{W=tc.width=innerWidth;H=tc.height=innerHeight};rs();addEventListener('resize',rs);
+    const root=document.documentElement;
     let mx=-100,my=-100,rx=-100,ry=-100,lx=0,ly=0,dist=0,lastMove=0,lastIdle=0,seen=false;
     const ps=[],rings=[];
     const add=p=>{if(ps.length<260)ps.push(p)};
@@ -812,58 +936,48 @@ function openPage(id,skipHash){
       for(let i=0;i<18;i++){const a=R(0,6.283),sp=R(1.5,6);add({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,r:R(1.4,4),a:1,g:.14,decay:.017})}
       rings.push({x,y,r:4,a:.8});
     }
-    addEventListener('mousemove',e=>{
+    addEventListener('pointermove',e=>{
+      if(e.pointerType==='touch')return;
       mx=e.clientX;my=e.clientY;lastMove=performance.now();
-      if(!seen){seen=true;rx=mx;ry=my;lx=mx;ly=my;bc.style.opacity=1;ring.style.opacity=1}
+      if(!root.classList.contains('blood-cursor'))root.classList.add('blood-cursor');
+      if(!seen){seen=true;rx=mx;ry=my;lx=mx;ly=my;bc.style.opacity=1}
       dist+=Math.hypot(mx-lx,my-ly);lx=mx;ly=my;
-      if(dist>15){dist=0;add({x:mx+R(-3,3),y:my+R(2,8),vx:R(-.4,.4),vy:R(.1,.9),r:R(1.4,3.2),a:.9,g:.05,decay:.02})}
+      if(FX.on&&dist>15){dist=0;add({x:mx+R(-3,3),y:my+R(2,8),vx:R(-.4,.4),vy:R(.1,.9),r:R(1.4,3.2),a:.9,g:.05,decay:.02})}
       const t=e.target;
-      ring.classList.toggle('hot',!!(t.closest&&t.closest('a,button,.nav-btn,.tab,.link-btn,.character img,[data-go],.menu-toggle')));
-      document.documentElement.classList.toggle('over-input',!!(t.closest&&t.closest('input,textarea')));
+      bc.classList.toggle('hot',!!(t.closest&&t.closest('a,button,.nav-btn,.tab,.link-btn,.character img,[data-go],.menu-toggle')));
+      root.classList.toggle('over-input',!!(t.closest&&t.closest('input,textarea')));
     },{passive:true});
-    document.documentElement.addEventListener('mouseleave',()=>{bc.style.opacity=0;ring.style.opacity=0;seen=false});
-    addEventListener('mousedown',e=>{bc.classList.add('down');splat(e.clientX,e.clientY)});
-    addEventListener('mouseup',()=>bc.classList.remove('down'));
+    root.addEventListener('mouseleave',()=>{bc.style.opacity=0;seen=false});
+    addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||!FX.on)return;bc.classList.add('down');splat(e.clientX,e.clientY)});
+    addEventListener('pointerup',()=>bc.classList.remove('down'));
     (function loop(){
       const now=performance.now();
-      rx+=(mx-rx)*.2;ry+=(my-ry)*.2;
       bc.style.transform='translate('+mx+'px,'+my+'px)';
-      ring.style.transform='translate('+(rx-17)+'px,'+(ry-17)+'px)';
-      if(seen&&now-lastMove>450&&now-lastIdle>1100){lastIdle=now;add({x:mx+6,y:my+15,vx:0,vy:.2,r:3.2,a:1,g:.09,decay:.007})}
       ctx.clearRect(0,0,W,H);
-      for(let i=ps.length-1;i>=0;i--){
-        const p=ps[i];p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.a-=p.decay;
-        if(p.a<=0||p.y>H+20){ps.splice(i,1);continue}
-        ctx.fillStyle='rgba(196,30,54,'+p.a+')';
-        ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*(1+Math.min(Math.abs(p.vy),6)*.35),0,0,6.283);ctx.fill();
-      }
-      for(let i=rings.length-1;i>=0;i--){
-        const o=rings[i];o.r+=2.4;o.a-=.045;
-        if(o.a<=0){rings.splice(i,1);continue}
-        ctx.strokeStyle='rgba(225,59,80,'+o.a+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.283);ctx.stroke();
+      if(FX.on){
+        if(seen&&now-lastMove>450&&now-lastIdle>1100){lastIdle=now;add({x:mx+6,y:my+15,vx:0,vy:.2,r:3.2,a:1,g:.09,decay:.007})}
+        for(let i=ps.length-1;i>=0;i--){
+          const p=ps[i];p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.a-=p.decay;
+          if(p.a<=0||p.y>H+20){ps.splice(i,1);continue}
+          ctx.fillStyle='rgba(196,30,54,'+p.a+')';
+          ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*(1+Math.min(Math.abs(p.vy),6)*.35),0,0,6.283);ctx.fill();
+        }
+        for(let i=rings.length-1;i>=0;i--){
+          const o=rings[i];o.r+=2.4;o.a-=.045;
+          if(o.a<=0){rings.splice(i,1);continue}
+          ctx.strokeStyle='rgba(225,59,80,'+o.a+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.283);ctx.stroke();
+        }
       }
       requestAnimationFrame(loop);
     })();
-    document.documentElement.classList.add('blood-cursor');
   }
 
-  /* drips on blocks */
-  function addDrips(el){
-    const hero=el.classList.contains('hero');
-    const d=document.createElement('div');d.className='drips';
-    const n=hero?6:3+Math.floor(Math.random()*2);let h='';
-    for(let i=0;i<n;i++){
-      h+='<i style="left:'+R(8,92).toFixed(1)+'%;--len:'+R(8,hero?52:28).toFixed(0)+'px;--dl:'+Math.floor(R(300,1000))+'ms"></i>';
-    }
-    d.innerHTML=h;el.insertBefore(d,el.firstChild);
-  }
   const dripSel='.card,.rule,.hero';
-  document.querySelectorAll(dripSel).forEach(addDrips);
+  
 
   /* blocks drip in when they appear */
   const sel='.card,.rule,.allowed,.forbidden,.step-line,.h-node,.note,.section-head,.tabs,.hero';
-  if(reduce){document.querySelectorAll(dripSel).forEach(el=>el.classList.add('bleed'))}
-  else{
+  {
     const io=new IntersectionObserver(es=>{
       es.forEach(en=>{
         if(!en.isIntersecting)return;
@@ -872,17 +986,18 @@ function openPage(id,skipHash){
         const i=Math.max(0,sibs.indexOf(el));
         el.style.transitionDelay=Math.min(i,8)*70+'ms';
         requestAnimationFrame(()=>el.classList.add('in'));
-        if(el.matches(dripSel))setTimeout(()=>el.classList.add('bleed'),350+Math.min(i,8)*70);
+        
         if(el.matches('.card,.hero'))setTimeout(()=>{el.classList.add('splash');setTimeout(()=>el.classList.remove('splash'),950)},450+Math.min(i,8)*70);
         setTimeout(()=>{el.classList.remove('reveal','in');el.style.transitionDelay=''},1200+i*70);
       });
     },{threshold:.08});
-    document.querySelectorAll(sel).forEach(el=>{el.classList.add('reveal');io.observe(el)});
+    document.querySelectorAll(sel).forEach(el=>{if(el.closest('.calm'))return;el.classList.add('reveal');io.observe(el)});
   }
 
   /* 3D tilt for character cards */
-  if(fine&&!reduce){
+  if(fine){
     document.querySelectorAll('.character').forEach(c=>{
+      if(c.closest('.calm'))return;
       c.addEventListener('mousemove',e=>{
         const r=c.getBoundingClientRect();
         const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
