@@ -120,56 +120,132 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
 @media(max-width:760px){.watermark{display:none}}
 
 /* ===== effects ===== */
+@property --x{syntax:'<length>';inherits:false;initial-value:0px}
+::selection{background:#b51f36;color:#fff}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-track{background:#0d0b0d}
+::-webkit-scrollbar-thumb{background:linear-gradient(#5d1021,#b51f36);border-radius:6px}
+.grid>.solo{grid-column:1/-1;justify-self:center;width:calc(50% - 8px)}
+@media(max-width:760px){.grid>.solo{width:100%}}
 .layout{position:relative;z-index:1}
+
+/* --- background: blood moon, mist, heartbeat, petals, blood rain --- */
 #embers{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--red),var(--red2),#ff8a98);box-shadow:0 0 12px var(--red2);z-index:100;transition:width .1s linear}
-#cursorGlow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,#e13b5018,transparent 65%);pointer-events:none;z-index:2;opacity:0;transition:opacity .4s}
-.card{position:relative}
-.card:before{content:"";position:absolute;inset:0;background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),#e13b5026,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;z-index:1}
-.card:hover:before{opacity:1}
-.card{transition:border-color .25s,box-shadow .25s}
-.card:hover{border-color:#7a2f42;box-shadow:0 10px 35px #a21c3524}
-.reveal{opacity:0;transform:translateY(18px) scale(.985)}
-.reveal.in{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+#bloodMoon{position:fixed;right:5vw;top:8vh;width:min(26vw,300px);aspect-ratio:1;z-index:0;pointer-events:none;animation:moonFloat 16s ease-in-out infinite}
+#bloodMoon:before{content:"";position:absolute;inset:-45%;background:radial-gradient(circle,#e13b5038 0,#b51f3618 38%,transparent 66%);animation:moonGlow 5s ease-in-out infinite}
+#bloodMoon i{position:absolute;inset:0;border-radius:50%;opacity:.55;
+ background:radial-gradient(circle at 36% 34%,#ff8d99 0,#d3293f 26%,#8c1a2e 60%,#3f0a15 100%);
+ -webkit-mask-image:radial-gradient(circle at 71% 38%,transparent 0 46%,#000 47.5%);mask-image:radial-gradient(circle at 71% 38%,transparent 0 46%,#000 47.5%)}
+@keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+@keyframes moonGlow{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+.fog{position:fixed;width:85vw;height:60vh;border-radius:50%;filter:blur(36px);z-index:0;pointer-events:none}
+#fog1{left:-25vw;bottom:-22vh;background:radial-gradient(closest-side,#8c1a2e33,transparent);animation:fogA 40s ease-in-out infinite alternate}
+#fog2{right:-30vw;bottom:-12vh;background:radial-gradient(closest-side,#5d102138,transparent);animation:fogB 52s ease-in-out infinite alternate}
+@keyframes fogA{to{transform:translate(38vw,-10vh) scale(1.25)}}
+@keyframes fogB{to{transform:translate(-40vw,-14vh) scale(1.3)}}
+#heart{position:fixed;inset:0;z-index:0;pointer-events:none;box-shadow:inset 0 0 190px #8c1a2e55;animation:heartbeat 3.4s ease-in-out infinite}
+@keyframes heartbeat{0%,40%,100%{opacity:.45}8%{opacity:1}16%{opacity:.55}24%{opacity:.95}}
+
+/* --- progress --- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#5d1021,var(--red2),#ff8a98);box-shadow:0 0 12px var(--red2);z-index:100;transition:width .1s linear}
+
+/* --- blood cursor --- */
+html.blood-cursor,html.blood-cursor *{cursor:none!important}
+html.blood-cursor input{cursor:text!important}
+#bloodTrail{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:290}
+#bloodCursor{position:fixed;left:0;top:0;width:17px;height:17px;pointer-events:none;z-index:300;opacity:0;
+ border-radius:0 50% 50% 50%;background:radial-gradient(circle at 62% 62%,#ff7d8c 0,#d3293f 45%,#6d1224 100%);
+ box-shadow:0 0 14px #e13b50aa,0 0 4px #ff8a98;transform-origin:0 0;transition:opacity .25s,filter .2s}
+#bloodCursor.down{filter:brightness(1.5) saturate(1.3)}
+#bloodRing{position:fixed;left:0;top:0;width:34px;height:34px;pointer-events:none;z-index:299;opacity:0;transition:opacity .25s}
+#bloodRing:before{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid #e13b5099;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s,border-color .3s}
+#bloodRing.hot:before{transform:scale(1.75);background:#e13b5020;border-color:#ff8a98}
+html.over-input #bloodCursor,html.over-input #bloodRing{opacity:0!important}
+
+/* --- blocks: blood drip-in, drips, splash --- */
+.card{position:relative;transition:border-color .3s,box-shadow .3s}
+.card:hover{border-color:#8c2a3f;box-shadow:0 0 0 1px #e13b5033,0 12px 40px #a21c3538}
+.reveal{opacity:0;transform:translateY(-24px) scaleY(.9);transform-origin:50% 0;filter:blur(6px)}
+.reveal.in{opacity:1;transform:none;filter:none;transition:opacity .7s ease,transform .85s cubic-bezier(.3,1.5,.4,1),filter .6s}
+.splash{animation:splash .9s ease-out}
+@keyframes splash{0%{box-shadow:0 0 0 0 #e13b5099}100%{box-shadow:0 0 0 24px #e13b5000}}
+.drips{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:3}
+.drips:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#b51f36,#e13b50,#b51f36,transparent);border-radius:2px}
+.drips i{position:absolute;top:0;width:4px;height:0;margin-left:-2px;border-radius:0 0 3px 3px;background:linear-gradient(#b51f36,#e13b50);transition:height 1.5s cubic-bezier(.25,.8,.3,1) var(--dl)}
+.drips i:after{content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;margin-left:-4.5px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 32%,#ff8d99,#c2243c 65%,#7e1226);opacity:0;transition:opacity .4s calc(var(--dl) + .9s)}
+.bleed>.drips i{height:var(--len)}
+.bleed>.drips i:after{opacity:1}
+.bleed:hover>.drips i{height:calc(var(--len)*1.7);transition-delay:0s}
+.section-head h3:after{content:"";display:block;height:3px;width:0;margin-top:6px;border-radius:3px;background:linear-gradient(90deg,#b51f36,#e13b50);box-shadow:0 0 10px #e13b5088;animation:bleedline 1s .2s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes bleedline{to{width:54px}}
+
+/* --- characters --- */
 .character{transform-style:preserve-3d;will-change:transform}
-.character img{transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s;cursor:zoom-in;filter:saturate(.95)}
-.character:hover img{transform:scale(1.07);filter:saturate(1.15) contrast(1.04)}
-.character .rank{animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #e13b5000}50%{box-shadow:0 0 14px 1px #e13b5055}}
-.brand-mark{animation:glow 3.5s ease-in-out infinite}
-@keyframes glow{0%,100%{box-shadow:0 8px 25px #a21c353d}50%{box-shadow:0 8px 38px #e13b5088}}
-.hero h2,.page-title{background:linear-gradient(90deg,#fff 0%,#fff 40%,#ff9aa8 50%,#fff 60%,#fff 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 7s linear infinite}
+.character img{transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s;filter:saturate(.95)}
+html:not(.blood-cursor) .character img{cursor:zoom-in}
+.character:hover img{transform:scale(1.07);filter:saturate(1.2) contrast(1.05)}
+
+/* --- heartbeat badges / logo / titles --- */
+@keyframes beat{0%,40%,100%{transform:scale(1);box-shadow:0 0 0 0 #e13b5000}10%{transform:scale(1.07);box-shadow:0 0 16px 2px #e13b5088}20%{transform:scale(1);box-shadow:0 0 4px 0 #e13b5044}30%{transform:scale(1.05);box-shadow:0 0 14px 2px #e13b5077}}
+.character .rank,.hero-tag,.brand-mark{animation:beat 3.2s ease-in-out infinite}
+.hero h2,.page-title{background:linear-gradient(90deg,#fff 0%,#fff 38%,#ff6b7d 50%,#fff 62%,#fff 100%);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 8s linear infinite}
 @keyframes shine{0%{background-position:120% 0}100%{background-position:-120% 0}}
 .hero:after{animation:spin 40s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero-tag{animation:pulse 3s ease-in-out infinite}
+
+/* --- hierarchy: blood flows down --- */
+.down{background:linear-gradient(#8c1a2e 0,#8c1a2e 38%,#ff8a98 50%,#8c1a2e 62%,#8c1a2e 100%);background-size:100% 300%;animation:flow 1.5s linear infinite}
+@keyframes flow{0%{background-position:0 0}100%{background-position:0 -300%}}
 .h-node{transition:transform .25s,border-color .25s,box-shadow .25s}
-.h-node:hover{transform:scale(1.03);border-color:#e13b50;box-shadow:0 0 20px #e13b5040}
+.h-node:hover{transform:scale(1.03);border-color:#e13b50;box-shadow:0 0 22px #e13b5050}
+
+/* --- buttons: blood fills up --- */
 .nav-btn{position:relative;overflow:hidden}
 .nav-btn:hover{transform:translateX(3px)}
-.ripple{position:absolute;border-radius:50%;background:#e13b5055;transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+.nav-btn.active:before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:3px;border-radius:3px;background:var(--red2);box-shadow:0 0 10px var(--red2);animation:beat 3.2s infinite}
+.link-btn,.tab,.back-btn{position:relative;overflow:hidden;isolation:isolate}
+.link-btn:before,.tab:before,.back-btn:before{content:"";position:absolute;left:-5%;right:-5%;bottom:0;height:0;z-index:-1;background:linear-gradient(#e13b50,#8c1a2e);border-radius:50% 50% 0 0/14px 14px 0 0;transition:height .4s cubic-bezier(.2,.8,.2,1)}
+.link-btn:hover:before,.tab:hover:before,.back-btn:hover:before{height:115%}
+.link-btn:hover,.tab:hover,.back-btn:hover{color:#fff}
+.tab.active:before{height:115%;opacity:.35}
+.ripple{position:absolute;border-radius:50%;background:#e13b5066;transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
 @keyframes rip{to{transform:scale(4);opacity:0}}
-.link-btn,.tab,.back-btn{position:relative;overflow:hidden}
-.link-btn:hover,.tab:hover{box-shadow:0 0 16px #e13b5040;transform:translateY(-1px)}
 .step-line,.rule{transition:transform .25s,border-color .25s}
 .step-line:hover,.rule:hover{transform:translateX(4px);border-color:#6a2c3b}
+
+/* --- page change: blood curtain --- */
+#curtain{position:fixed;left:0;top:0;width:100%;height:230vh;z-index:150;pointer-events:none;transform:translateY(calc(-100% - 100px));will-change:transform}
+#curtain .body{position:absolute;inset:0;background:linear-gradient(#5d1021,#8c1a2e 45%,#b51f36)}
+#curtain svg{position:absolute;left:0;top:calc(100% - 1px);width:100%;height:90px;display:block}
+#curtain path{fill:#b51f36}
+#curtain.go{animation:curtain .95s cubic-bezier(.5,0,.5,1) forwards}
+@keyframes curtain{0%{transform:translateY(calc(-100% - 100px))}100%{transform:translateY(100vh)}}
+
+/* --- lightbox --- */
 #lightbox{position:fixed;inset:0;background:#050304ee;backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;padding:24px}
 #lightbox.open{opacity:1;pointer-events:auto}
 #lightbox img{max-width:min(92vw,1100px);max-height:80vh;border-radius:14px;border:1px solid #713043;box-shadow:0 0 60px #a21c3555;transform:scale(.9);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
 #lightbox.open img{transform:scale(1)}
 #lightbox p{margin:0;color:#e9c4cb;font-size:14px;letter-spacing:1px}
 #lightbox span{color:var(--muted);font-size:11px}
+
+@media(max-width:760px){#bloodMoon{width:40vw;right:-6vw;top:10vh}}
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation:none!important;transition:none!important}
-  .reveal{opacity:1;transform:none}
-  #embers,#cursorGlow{display:none}
+  .reveal{opacity:1;transform:none;filter:none}
+  .section-head h3:after{width:54px}
+  #embers,#bloodTrail,#bloodCursor,#bloodRing,#curtain,.fog{display:none}
+  html.blood-cursor,html.blood-cursor *{cursor:auto!important}
 }
 </style>
 </head>
 <body>
+<div id="bloodMoon"><i></i></div>
+<div class="fog" id="fog1"></div><div class="fog" id="fog2"></div>
+<div id="heart"></div>
 <canvas id="embers"></canvas>
 <div id="progress"></div>
-<div id="cursorGlow"></div>
+<div id="curtain"><div class="body"></div><svg viewBox="0 0 1000 90" preserveAspectRatio="none"><path d=""/></svg></div>
+<canvas id="bloodTrail"></canvas><div id="bloodCursor"></div><div id="bloodRing"></div>
 <div id="lightbox"><img alt=""><p></p><span>Нажмите, чтобы закрыть</span></div>
 <div class="layout">
 <aside class="sidebar" id="sidebar">
@@ -389,7 +465,7 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
     <article class="card rank-card"><h3>Hobura  -  Shateigashira</h3><div class="cooldown">КД: 3 дня</div><ul><li>Убить 20 истребителей.</li><li>Занять любое призовое место в еженедельном турнире.</li><li>Выполнить задание Демона Двенадцати Лун.</li></ul></article>
     <article class="card rank-card"><h3>Shateigashira  -  Wakagashira</h3><div class="cooldown">КД: 3 дня · Получение профессии: Демон магии крови</div><ul><li>Победить 5 демонов в додзё.</li><li>Убить 20 истребителей.</li><li>Получить 1-е или 2-е место в еженедельном турнире.</li></ul></article>
     <article class="card rank-card"><h3>Wakagashira  -  Tsukomon</h3><div class="cooldown">КД: 3 дня</div><ul><li>Получить одобрение на повышение от Кокушибо.</li><li>Поучаствовать в тренировках от 5 разных Высших Лун.</li><li>Занять 1-е место в еженедельном турнире.</li></ul></article>
-    <article class="card rank-card"><h3>Tsukomon  -  Shiko</h3><div class="cooldown">КД: 3 дня</div><ul><li>Убить 5 разных Столпов.</li><li>Выполнить личное задание от Прародителя демонов.</li><li>Придумать новую технику магии крови и отыграть её 20 РП-действиями.</li><li>Получить одобрение Прародителя демонов.</li></ul></article>
+    <article class="card rank-card solo"><h3>Tsukomon  -  Shiko</h3><div class="cooldown">КД: 3 дня</div><ul><li>Убить 5 разных Столпов.</li><li>Выполнить личное задание от Прародителя демонов.</li><li>Придумать новую технику магии крови и отыграть её 20 РП-действиями.</li><li>Получить одобрение Прародителя демонов.</li></ul></article>
   </div>
   <div class="note">Для подтверждения выполненных критериев используйте установленный на сервере порядок отчётности и доказательств. Сами по себе карточки сайта не фиксируют прогресс персонажа.</div>
   <div class="footer"><span>Архив демонов | yufu.su DS2</span><span>Система повышения</span></div>
@@ -566,7 +642,7 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
     <button class="tab" data-tab="c3">Третий круг</button>
     <button class="tab" data-tab="c4">Четвёртый круг</button>
   </div>
-  <div class="tab-panel active" id="c1"><p class="small">Начало пути</p><div class="grid"><div class="rank-card card stage"><h3>Хобура - Шитейгашира</h3><ul><li>Выполнить 3 поручения от Низшей Луны.</li><li>Убить 15 истребителей.</li><li>Помочь Аказе провести еженедельный турнир.</li></ul></div><div class="rank-card card stage"><h3>Шитейгашира - Вакагашира</h3><ul><li>Выполнить 4 поручения от Низших Лун.</li><li>Одолеть 5 демонов в условиях тренировочного боя.</li><li>Одолеть в битве крови демона с рангом не ниже Шитейгаширы.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 70% здоровья.</li></ul></div><div class="rank-card card stage"><h3>Вакагашира - Цукомон</h3><ul><li>Выполнить 4 поручения от одной Низшей Луны (при её отсутствии: от любой Низшей Луны).</li><li>Получить одобрение от курирующей Луны кругов.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 60% здоровья.</li></ul></div></div></div>
+  <div class="tab-panel active" id="c1"><p class="small">Начало пути</p><div class="grid"><div class="rank-card card stage"><h3>Хобура - Шитейгашира</h3><ul><li>Выполнить 3 поручения от Низшей Луны.</li><li>Убить 15 истребителей.</li><li>Помочь Аказе провести еженедельный турнир.</li></ul></div><div class="rank-card card stage"><h3>Шитейгашира - Вакагашира</h3><ul><li>Выполнить 4 поручения от Низших Лун.</li><li>Одолеть 5 демонов в условиях тренировочного боя.</li><li>Одолеть в битве крови демона с рангом не ниже Шитейгаширы.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 70% здоровья.</li></ul></div><div class="rank-card card stage solo"><h3>Вакагашира - Цукомон</h3><ul><li>Выполнить 4 поручения от одной Низшей Луны (при её отсутствии: от любой Низшей Луны).</li><li>Получить одобрение от курирующей Луны кругов.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 60% здоровья.</li></ul></div></div></div>
   <div class="tab-panel" id="c2"><p class="small">Углубление силы</p><div class="grid"><div class="rank-card card stage"><h3>Цукомон - Хобура</h3><ul><li>Выиграть в битве крови у 5-й Низшей Луны или 1-й Низшей Луны.</li></ul></div><div class="rank-card card stage"><h3>Хобура - Шитейгашира</h3><ul><li>Пройти проверку на знание клятв крови у Инструктора или Луны.</li><li>Побороть жажду крови (20 РП-действий).</li><li>Выполнить 3 поручения от Низших Лун.</li><li>Убить 20 истребителей и 1 столпа.</li></ul></div><div class="rank-card card stage"><h3>Шитейгашира - Вакагашира</h3><ul><li>Выполнить поручение от 6-й Высшей Луны.</li><li>Убить 15 истребителей и распространить их кровь в водоёмах (5 РП-действий на труп и 20 РП-действий в конце на распространение).</li><li>Выиграть битву крови у равного по силе демона.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 50% здоровья.</li></ul></div><div class="rank-card card stage"><h3>Вакагашира - Цукомон</h3><ul><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 45% здоровья.</li><li>Получить одобрение от курирующей Луны кругов.</li></ul></div></div></div>
   <div class="tab-panel" id="c3"><p class="small">Вершина мастерства</p><div class="grid"><div class="rank-card card stage"><h3>Цукомон - Хобура</h3><ul><li>Получить одобрение от двух (на выбор) Высших Лун на переход в 4-й круг (Кокушибо, Доума, Аказа).</li></ul></div><div class="rank-card card stage"><h3>Хобура - Шитейгашира</h3><ul><li>Помочь Пятой Высшей Луне Гёкко добыть 10 голов истребителей, создать 10 горшков и сложить туда головы (5 РП-действий на 1 горшок). Преподнести их Гёкко в качестве подарка.</li><li>Убить 25 истребителей и 2 столпов.</li><li>Поджечь Деревню Кузнецов совместно с другими демонами и устранить всех, кто явится на помощь (если помощь не придёт, задание не засчитывается).</li></ul></div><div class="rank-card card stage"><h3>Шитейгашира - Вакагашира</h3><ul><li>Успешно выполнить 5 поручений от Первой Высшей Луны.</li><li>Успешно помочь Третьей Высшей Луне провести еженедельный рейтинг для демонов.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 40% здоровья.</li></ul></div><div class="rank-card card stage"><h3>Вакагашира - Цукомон</h3><ul><li>Получить 3 рекомендации от любой Луны.</li><li>Сражение со Второй Высшей Луной: довести её до 35% здоровья.</li></ul></div></div></div>
   <div class="tab-panel" id="c4"><p class="small">Абсолютная сила</p><div class="grid"><div class="rank-card card stage"><h3>Цукомон - Хобура</h3><ul><li>Получить одобрение от трёх Высших Лун на переход в 4-й круг (Кокушибо, Доума, Аказа).</li></ul></div><div class="rank-card card stage"><h3>Хобура - Шитейгашира</h3><ul><li>Выполнить 3 поручения от Третьей Высшей Луны.</li><li>Занять минимум 3-е место в еженедельном турнире.</li><li>Выполнить 3 поручения от Первой Высшей Луны.</li></ul></div><div class="rank-card card stage"><h3>Шитейгашира - Вакагашира</h3><ul><li>Совместно с другими демонами похитить одного Столпа и вынудить его сразиться с Третьей Высшей Луной Аказой. Преподнести Аказе их битву в качестве подарка.</li><li>Получить 2-ю рекомендацию от любой Луны.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 30% здоровья.</li></ul></div><div class="rank-card card stage"><h3>Вакагашира - Цукомон</h3><ul><li>Выполнить 5 последовательных поручений от Первой Высшей Луны Кокушибо.</li><li>Занять минимум 2-е место в еженедельном турнире.</li><li>Сражение с одной из тройки Высших Лун (Кокушибо, Доума, Аказа): довести её до 20% здоровья.</li></ul></div></div></div>
@@ -619,7 +695,7 @@ ol,ul{padding-left:21px;margin:8px 0;color:#c8b9be}li{padding:3px 0}
 const pages=[...document.querySelectorAll('.page')];
 const navButtons=[...document.querySelectorAll('.nav-btn')];
 const crumb=document.getElementById('crumb');
-function openPage(id,skipHash){
+function doOpen(id,skipHash){
   const target=pages.find(p=>p.id===id)||pages[0];
   id=target.id;
   const navId=target.dataset.parent||id;
@@ -646,31 +722,73 @@ document.querySelectorAll('#circleTabs .tab').forEach(t=>t.addEventListener('cli
   document.querySelectorAll('#circles .tab-panel').forEach(p=>p.classList.toggle('active',p.id===t.dataset.tab));
 }));
 window.addEventListener('hashchange',()=>openPage(location.hash.slice(1),true));
-if(location.hash)openPage(location.hash.slice(1),true);
+if(location.hash)doOpen(location.hash.slice(1),true);
+
+
+/* ===== blood curtain page transition ===== */
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const curtain=document.getElementById('curtain');
+let curtainBusy=false;
+function dripPath(){
+  const w=1000;let x=w,d='M0 0H'+w+'V12';
+  while(x>30){
+    x-=30+Math.random()*90;
+    const dw=8+Math.random()*16,dl=14+Math.random()*58;
+    d+=' H'+x.toFixed(1)+' C'+(x-1).toFixed(1)+' 12 '+(x-1).toFixed(1)+' '+(12+dl).toFixed(1)+' '+(x-dw/2).toFixed(1)+' '+(12+dl).toFixed(1)
+      +' C'+(x-dw+1).toFixed(1)+' '+(12+dl).toFixed(1)+' '+(x-dw+1).toFixed(1)+' 12 '+(x-dw).toFixed(1)+' 12';
+    x-=dw;
+  }
+  return d+' H0Z';
+}
+function openPage(id,skipHash){
+  const cur=pages.find(p=>p.classList.contains('active'));
+  if(!curtain||reduceMotion||curtainBusy||(cur&&cur.id===id)){doOpen(id,skipHash);return}
+  curtainBusy=true;
+  curtain.querySelector('path').setAttribute('d',dripPath());
+  curtain.classList.remove('go');void curtain.offsetWidth;curtain.classList.add('go');
+  setTimeout(()=>doOpen(id,skipHash),430);
+  setTimeout(()=>{curtainBusy=false;curtain.classList.remove('go')},1000);
+}
 
 /* ===== effects ===== */
 (function(){
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce=reduceMotion;
   const fine=window.matchMedia('(pointer: fine)').matches;
+  const R=(a,b)=>a+Math.random()*(b-a);
 
-  /* embers */
+  /* background: red spider lilies + thin blood rain */
   const cv=document.getElementById('embers');
   if(cv&&!reduce){
-    const ctx=cv.getContext('2d');let W,H,parts=[];
-    const size=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};
-    size();addEventListener('resize',size);
-    const make=(init)=>({x:Math.random()*W,y:init?Math.random()*H:H+10,r:Math.random()*2.2+.6,v:Math.random()*.5+.15,d:Math.random()*Math.PI*2,a:Math.random()*.5+.2});
-    const N=Math.min(60,Math.floor(innerWidth/22));
-    for(let i=0;i<N;i++)parts.push(make(true));
+    const ctx=cv.getContext('2d');let W,H;
+    const size=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};size();addEventListener('resize',size);
+    const mkFlower=init=>({x:R(0,W),y:init?R(0,H):-40,len:R(10,22),rot:R(0,6.28),vr:R(-.006,.006),vy:R(.2,.55),sw:R(0,6.28),a:R(.18,.42),n:5+Math.floor(R(0,3))});
+    const mkDrop=init=>({x:R(0,W),y:init?R(0,H):R(-120,0),l:R(10,28),v:R(8,14),a:R(.05,.15)});
+    const flowers=Array.from({length:Math.min(16,Math.floor(innerWidth/70))},()=>mkFlower(true));
+    const drops=Array.from({length:Math.min(55,Math.floor(innerWidth/28))},()=>mkDrop(true));
+    function flower(f){
+      ctx.save();ctx.translate(f.x,f.y);ctx.rotate(f.rot);
+      ctx.strokeStyle='rgba(225,59,80,'+f.a+')';ctx.fillStyle='rgba(255,120,135,'+f.a+')';ctx.lineWidth=1.3;ctx.lineCap='round';
+      for(let k=0;k<f.n;k++){
+        const a=k*6.283/f.n,c=Math.cos(a),s=Math.sin(a);
+        ctx.beginPath();ctx.moveTo(0,0);
+        ctx.quadraticCurveTo(c*f.len*.6+s*f.len*.35,s*f.len*.6-c*f.len*.35,c*f.len,s*f.len);ctx.stroke();
+        ctx.beginPath();ctx.arc(c*f.len,s*f.len,1.3,0,6.283);ctx.fill();
+      }
+      ctx.restore();
+    }
     (function loop(){
       if(!document.hidden){
         ctx.clearRect(0,0,W,H);
-        for(const p of parts){
-          p.y-=p.v;p.d+=.01;p.x+=Math.sin(p.d)*.35;
-          if(p.y<-10){Object.assign(p,make(false))}
-          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
-          g.addColorStop(0,'rgba(255,90,110,'+p.a+')');g.addColorStop(1,'rgba(225,59,80,0)');
-          ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*5,0,6.283);ctx.fill();
+        ctx.lineWidth=1;ctx.lineCap='round';
+        for(const d of drops){
+          ctx.strokeStyle='rgba(205,30,55,'+d.a+')';
+          ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-1.2,d.y+d.l);ctx.stroke();
+          d.y+=d.v;if(d.y>H+30)Object.assign(d,mkDrop(false));
+        }
+        for(const f of flowers){
+          f.y+=f.vy;f.sw+=.012;f.x+=Math.sin(f.sw)*.4;f.rot+=f.vr;
+          if(f.y>H+40)Object.assign(f,mkFlower(false));
+          flower(f);
         }
       }
       requestAnimationFrame(loop);
@@ -682,31 +800,85 @@ if(location.hash)openPage(location.hash.slice(1),true);
   const upd=()=>{const h=document.documentElement;const m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'};
   addEventListener('scroll',upd,{passive:true});upd();
 
-  /* cursor glow + card spotlight */
-  const glow=document.getElementById('cursorGlow');
-  if(fine&&!reduce){
-    addEventListener('mousemove',e=>{glow.style.opacity=1;glow.style.transform='translate('+e.clientX+'px,'+e.clientY+'px)'},{passive:true});
-    document.addEventListener('mouseleave',()=>glow.style.opacity=0);
+  /* blood cursor: drop at the pointer, lagging ring, falling droplets, splat on click */
+  const bc=document.getElementById('bloodCursor'),ring=document.getElementById('bloodRing'),tc=document.getElementById('bloodTrail');
+  if(fine&&!reduce&&bc&&ring&&tc){
+    const ctx=tc.getContext('2d');let W,H;
+    const rs=()=>{W=tc.width=innerWidth;H=tc.height=innerHeight};rs();addEventListener('resize',rs);
+    let mx=-100,my=-100,rx=-100,ry=-100,lx=0,ly=0,dist=0,lastMove=0,lastIdle=0,seen=false;
+    const ps=[],rings=[];
+    const add=p=>{if(ps.length<260)ps.push(p)};
+    function splat(x,y){
+      for(let i=0;i<18;i++){const a=R(0,6.283),sp=R(1.5,6);add({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1,r:R(1.4,4),a:1,g:.14,decay:.017})}
+      rings.push({x,y,r:4,a:.8});
+    }
+    addEventListener('mousemove',e=>{
+      mx=e.clientX;my=e.clientY;lastMove=performance.now();
+      if(!seen){seen=true;rx=mx;ry=my;lx=mx;ly=my;bc.style.opacity=1;ring.style.opacity=1}
+      dist+=Math.hypot(mx-lx,my-ly);lx=mx;ly=my;
+      if(dist>15){dist=0;add({x:mx+R(-3,3),y:my+R(2,8),vx:R(-.4,.4),vy:R(.1,.9),r:R(1.4,3.2),a:.9,g:.05,decay:.02})}
+      const t=e.target;
+      ring.classList.toggle('hot',!!(t.closest&&t.closest('a,button,.nav-btn,.tab,.link-btn,.character img,[data-go],.menu-toggle')));
+      document.documentElement.classList.toggle('over-input',!!(t.closest&&t.closest('input,textarea')));
+    },{passive:true});
+    document.documentElement.addEventListener('mouseleave',()=>{bc.style.opacity=0;ring.style.opacity=0;seen=false});
+    addEventListener('mousedown',e=>{bc.classList.add('down');splat(e.clientX,e.clientY)});
+    addEventListener('mouseup',()=>bc.classList.remove('down'));
+    (function loop(){
+      const now=performance.now();
+      rx+=(mx-rx)*.2;ry+=(my-ry)*.2;
+      bc.style.transform='translate('+mx+'px,'+my+'px)';
+      ring.style.transform='translate('+(rx-17)+'px,'+(ry-17)+'px)';
+      if(seen&&now-lastMove>450&&now-lastIdle>1100){lastIdle=now;add({x:mx+6,y:my+15,vx:0,vy:.2,r:3.2,a:1,g:.09,decay:.007})}
+      ctx.clearRect(0,0,W,H);
+      for(let i=ps.length-1;i>=0;i--){
+        const p=ps[i];p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.a-=p.decay;
+        if(p.a<=0||p.y>H+20){ps.splice(i,1);continue}
+        ctx.fillStyle='rgba(196,30,54,'+p.a+')';
+        ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*(1+Math.min(Math.abs(p.vy),6)*.35),0,0,6.283);ctx.fill();
+      }
+      for(let i=rings.length-1;i>=0;i--){
+        const o=rings[i];o.r+=2.4;o.a-=.045;
+        if(o.a<=0){rings.splice(i,1);continue}
+        ctx.strokeStyle='rgba(225,59,80,'+o.a+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,6.283);ctx.stroke();
+      }
+      requestAnimationFrame(loop);
+    })();
+    document.documentElement.classList.add('blood-cursor');
   }
-  document.addEventListener('mousemove',e=>{
-    const c=e.target.closest&&e.target.closest('.card');
-    if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}
-  },{passive:true});
 
-  /* scroll reveal with stagger */
-  const sel='.card,.rule,.allowed,.forbidden,.step-line,.h-node,.note,.section-head,.tabs';
-  const io=new IntersectionObserver(es=>{
-    es.forEach(en=>{
-      if(!en.isIntersecting)return;
-      const el=en.target;io.unobserve(el);
-      const sibs=[...el.parentElement.children].filter(x=>x.classList.contains('reveal')||x===el);
-      const i=Math.max(0,sibs.indexOf(el));
-      el.style.transitionDelay=Math.min(i,8)*70+'ms';
-      requestAnimationFrame(()=>el.classList.add('in'));
-      setTimeout(()=>{el.classList.remove('reveal','in');el.style.transitionDelay=''},1100+i*70);
-    });
-  },{threshold:.08});
-  if(!reduce)document.querySelectorAll(sel).forEach(el=>{el.classList.add('reveal');io.observe(el)});
+  /* drips on blocks */
+  function addDrips(el){
+    const hero=el.classList.contains('hero');
+    const d=document.createElement('div');d.className='drips';
+    const n=hero?6:3+Math.floor(Math.random()*2);let h='';
+    for(let i=0;i<n;i++){
+      h+='<i style="left:'+R(8,92).toFixed(1)+'%;--len:'+R(8,hero?52:28).toFixed(0)+'px;--dl:'+Math.floor(R(300,1000))+'ms"></i>';
+    }
+    d.innerHTML=h;el.insertBefore(d,el.firstChild);
+  }
+  const dripSel='.card,.rule,.hero';
+  document.querySelectorAll(dripSel).forEach(addDrips);
+
+  /* blocks drip in when they appear */
+  const sel='.card,.rule,.allowed,.forbidden,.step-line,.h-node,.note,.section-head,.tabs,.hero';
+  if(reduce){document.querySelectorAll(dripSel).forEach(el=>el.classList.add('bleed'))}
+  else{
+    const io=new IntersectionObserver(es=>{
+      es.forEach(en=>{
+        if(!en.isIntersecting)return;
+        const el=en.target;io.unobserve(el);
+        const sibs=[...el.parentElement.children].filter(x=>x.classList.contains('reveal')||x===el);
+        const i=Math.max(0,sibs.indexOf(el));
+        el.style.transitionDelay=Math.min(i,8)*70+'ms';
+        requestAnimationFrame(()=>el.classList.add('in'));
+        if(el.matches(dripSel))setTimeout(()=>el.classList.add('bleed'),350+Math.min(i,8)*70);
+        if(el.matches('.card,.hero'))setTimeout(()=>{el.classList.add('splash');setTimeout(()=>el.classList.remove('splash'),950)},450+Math.min(i,8)*70);
+        setTimeout(()=>{el.classList.remove('reveal','in');el.style.transitionDelay=''},1200+i*70);
+      });
+    },{threshold:.08});
+    document.querySelectorAll(sel).forEach(el=>{el.classList.add('reveal');io.observe(el)});
+  }
 
   /* 3D tilt for character cards */
   if(fine&&!reduce){
@@ -721,7 +893,7 @@ if(location.hash)openPage(location.hash.slice(1),true);
     });
   }
 
-  /* nav ripple */
+  /* button ripple */
   document.querySelectorAll('.nav-btn,.link-btn,.tab').forEach(b=>b.addEventListener('click',e=>{
     const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)/2;
     const s=document.createElement('span');s.className='ripple';
@@ -741,7 +913,7 @@ if(location.hash)openPage(location.hash.slice(1),true);
     if(img.complete)fit(img);else img.addEventListener('load',()=>fit(img));
   });
 
-  /* lightbox: full image on click */
+  /* lightbox */
   const lb=document.getElementById('lightbox'),lbi=lb.querySelector('img'),lbp=lb.querySelector('p');
   document.addEventListener('click',e=>{
     const img=e.target.closest&&e.target.closest('.character img');
